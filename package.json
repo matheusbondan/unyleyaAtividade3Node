@@ -1,0 +1,22 @@
+{
+  "name": "trabalho3",
+  "version": "1.0.0",
+  "description": "Atividade 3 do módulo de Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Matheus Bondan",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.22",
+    "mongoose-type-url": "^1.0.5",
+    "shortid": "^2.2.14"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
