@@ -36,6 +36,6 @@ app.use('/docs', swaggerUI.serve, swaggerUI.setup(spec))
 app.use("/", indexRoute);
 app.use("/short", indexShort);
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);
 
 module.exports = app;
