@@ -1,5 +1,6 @@
 const connect_db =
-  "mongodb://localhost/atividade3Unyleya";
+process.env.MONGODB_URI;
+
 const db_opt = {
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 500,
