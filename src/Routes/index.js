@@ -13,15 +13,6 @@ const path = require("path");
  * @property {[Urls]} result
  */
 
-//  {
-//   "_id": "61f71951503e0dcf1505c87d",
-//   "url": "http://microsoft.com",
-//   "short": "4dRfV",
-//   "created": "2022-01-30T23:03:45.133Z",
-//   "shortUrl": "http://localhost:5000/4dRfV",
-//   "__v": 0
-// }
-
 /**
  * @param {Express.Request} req
  * @param {Express.Response} res
@@ -30,7 +21,7 @@ const path = require("path");
 
 router.get("/", async (req, res) => {
   const list = await Urls.find({});
-  return res.json(list);
+  return res.status(200).json(list);
 });
 
 router.get("/:short", async (req, res) => {
@@ -50,11 +41,11 @@ router.get("/:short", async (req, res) => {
 router.get("/id/:id", async (req, res) => {
   let id = req.params.id;
 
-  if (!id) return res.status(403).end({ error: "Id inválido!" });
+  if (!id) return res.status(404).end({ error: "Não foi encontrada nenhuma URL com esse id!" });
 
   try {
     const url = await Urls.find({ _id: id });
-    return res.json(url);
+    return res.status(200).json(url);
   } catch (err) {
     return res.status(500).send({ error: "Erro ao buscar o Id" });
   }
@@ -63,31 +54,26 @@ router.get("/id/:id", async (req, res) => {
 router.post("/date", async (req, res) => {
   let date = req.body.date;
 
-  if (!date) return res.status(403).end({ error: "Id inválido!" });
+  if (!date) return res.status(404).end({ error: "Não foi encontrada nenhuma URL com essa data!" });
 
   try {
-    console.log("Short", date)
-
     const gt = `${date}T00:00:00.000Z`
     const lt = `${date}T23:59:59.000Z`
-
-    console.log("gt", gt)
-    console.log("lt", lt)
 
     const url = await Urls.find({
       'created': { $gt: gt,
       $lt: lt}
     })
-    return res.json(url);
+    return res.status(200).json(url);
   } catch (err) {
-    return res.status(500).send({ error: "Erro ao buscar o Id" });
+    return res.status(500).send({ error: "Erro ao buscar a data" });
   }
 });
 
 router.delete("/:id", async (req, res) => {
   const id = req.params.id;
   await Urls.findOneAndDelete(id);
-  return res.send({ message: "Url Deleted" });
+  return res.status(200).send({ message: "Url Deleted" });
 });
 
 module.exports = router;

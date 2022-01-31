@@ -13,7 +13,7 @@ const urlSchema = new Schema({
 urlSchema.pre('save', async function(next) {
     let url = this;
     url.short = await url.short.replace(/([^A-Za-z0-9])/, '').slice(1,6);
-    url.shortUrl = await `http://localhost:5000/${url.short}`  
+    url.shortUrl = await `https://morning-sierra-21406.herokuapp.com/${url.short}`  
     return next()
 })
 

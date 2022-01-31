@@ -1,0 +1,201 @@
+openapi: 3.0.0
+info:
+  description: Swagger das APIs utilizadas pelo Shorts URLs.
+  version: "1.0"
+  title: Shorts URLs
+servers:
+  - url: https://morning-sierra-21406.herokuapp.com
+    description: PROD
+paths:
+  "/short":
+    post:
+      tags:
+        - Short
+      summary: Envia uma URL para ser encurtada.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/URLObject'
+        "200":
+          description: Url ja existente no banco, retorna a já existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/URLObject'
+        "500":
+          description: Internal Server Error
+  "/":
+    get:
+      tags:
+        - Short
+      summary: Retorna a lista com todas as URLs cadastradas.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/URLObject'
+  "/date":
+    post:
+      tags:
+        - Short
+      summary: Retorna todas as URLs cadastradas na data passada.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlDateRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/URLObject'
+        "404":
+          description: Não encontrou resultados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error
+  "/id/{id}":
+    get:
+      tags:
+        - Short
+      summary: Retorna URL pelo id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Id da URL encurtada"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/URLObject'
+        "404":
+          description: Não encontrou resultados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error
+  "/{short}":
+    get:
+      tags:
+        - Short
+      summary: Retorna URL pela URL short.
+      parameters:
+        - name: short
+          in: path
+          required: true
+          description: "Short da URL encurtada"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/URLObject'
+        "404":
+          description: Não encontrou resultados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error
+  "/{id}":
+    delete:
+      tags:
+        - Short
+      summary: Excluir URL pelo id.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Id da URL encurtada"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+        "500":
+          description: Internal Server Error
+          
+components:
+  schemas:
+    UrlRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          description: "Envio da URL completa"
+    URLObject:
+      type: object
+      properties:
+        _id:
+          type: string
+          nullable: false
+        url:
+          type: string
+          nullable: false
+        short:
+          type: string
+          nullable: false
+        created:
+          type: string
+          nullable: false
+        shortUrl:
+          type: string
+          nullable: false
+    UrlDateRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: "Retorna todas as URLs cadastradas na data passada."
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: "Mensagem de erro"
+    DeleteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Mensagem"
+
+
+
