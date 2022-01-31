@@ -5,25 +5,58 @@ const path = require("path");
 
 
 /**
- * @module Index
+ * @swagger
+ * "/":
+    get:
+      tags:
+        - Short
+      summary: Retorna a lista com todas as URLs cadastradas.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/URLObject'
  */
-
-/**
- * @typedef {Object} UrlsListResponse
- * @property {[Urls]} result
- */
-
-/**
- * @param {Express.Request} req
- * @param {Express.Response} res
- * @returns {Promise<UrlsListResponse>}
- */
-
 router.get("/", async (req, res) => {
   const list = await Urls.find({});
   return res.status(200).json(list);
 });
 
+
+/**
+ * @swagger
+ * /{short}:
+    get:
+      tags:
+        - Short
+      summary: Retorna URL pela URL short.
+      parameters:
+        - name: short
+          in: path
+          required: true
+          description: "Short da URL encurtada"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/URLObject'
+        "404":
+          description: Não encontrou resultados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "500":
+          description: Internal Server Error
+ */
 router.get("/:short", async (req, res) => {
   let short = req.params.short;
 
